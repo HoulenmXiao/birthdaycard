@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日贺卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f9f0ff, #f5e1fd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        /* 信封样式 */
+        .envelope {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .envelope-front {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #e91e63, #f48fb1);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.5s ease;
+            transform-origin: bottom;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .envelope-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: -300px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(145deg, #f06292, #e91e63);
+            border-radius: 12px 12px 0 0;
+            z-index: 1;
+            transform-origin: bottom;
+            transition: transform 0.8s ease;
+        }
+        
+        .envelope-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+        }
+        
+        .handwritten-letter {
+            width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .open-btn {
+            margin-top: 30px;
+            padding: 12px 40px;
+            background: white;
+            color: #e91e63;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .open-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .open-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .heart {
+            font-size: 40px;
+            margin: 20px 0;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 信封打开后的状态 */
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .envelope.open .envelope-front {
+            transform: rotateX(180deg);
+        }
+        
+        .envelope.open .envelope-content {
+            display: flex;
+            animation: fadeIn 0.5s ease 0.5s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .envelope {
+                height: 450px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .open-btn {
+                padding: 10px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-front">
+                <div class="title">生日快乐</div>
+                <div class="subtitle">陈雨亲启</div>
+                <div class="heart">💌</div>
+                <button class="open-btn" id="openBtn">开启祝福</button>
+            </div>
+            <div class="envelope-content">
+                <!-- 这里替换为你的手写贺信图片路径 -->
+                <img src="letter.jpg" alt="手写贺信" class="handwritten-letter">
+                <div class="message">愿你的每一天都充满阳光与欢笑</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelope = document.getElementById('envelope');
+            const openBtn = document.getElementById('openBtn');
+            
+            openBtn.addEventListener('click', function() {
+                envelope.classList.add('open');
+            });
+            
+            // 点击信封其他区域也可以打开
+            envelope.addEventListener('click', function(e) {
+                if (e.target === envelope) {
+                    envelope.classList.add('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
